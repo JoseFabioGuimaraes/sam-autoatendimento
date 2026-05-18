@@ -1,0 +1,41 @@
+.search-bar {
+  position: relative; margin-bottom: 1.5rem; max-width: 500px;
+}
+.search-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+.search-bar input { padding-left: 2.8rem; }
+
+.medico-card {
+  display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+}
+.medico-avatar {
+  width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff;
+  font-weight: 700; font-size: 1.2rem; flex-shrink: 0;
+}
+.medico-info { flex: 1; min-width: 0; }
+.medico-info h3 { font-size: 1rem; font-weight: 600; }
+.medico-espec { font-size: 0.85rem; color: var(--primary-light); font-weight: 500; }
+.medico-crm { font-size: 0.75rem; color: var(--text-muted); }
+
+.slots-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+.slot-btn {
+  padding: 0.6rem; border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 600;
+  background: var(--bg-hover); border: 1px solid var(--border); color: var(--text);
+  cursor: pointer; transition: all var(--transition); text-align: center;
+}
+.slot-btn:hover { border-color: var(--primary); background: var(--primary-bg); color: var(--primary); }
+.slot-btn.selected { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+.consulta-card { margin-bottom: 0.75rem; }
+.consulta-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem; }
+.consulta-header h3 { font-size: 0.95rem; }
+.consulta-meta { display: flex; flex-wrap: wrap; gap: 1rem; font-size: 0.85rem; color: var(--text-secondary); }
+.consulta-meta span { display: flex; align-items: center; gap: 0.3rem; }
+.consulta-actions { display: flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap; }
+.consulta-justificativa { margin-top: 0.5rem; padding: 0.6rem; background: rgba(239,68,68,0.08); border-radius: var(--radius-sm); font-size: 0.8rem; color: #fca5a5; }
+
+.filter-bar { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center; }
+.filter-bar select, .filter-bar input { width: auto; min-width: 160px; }

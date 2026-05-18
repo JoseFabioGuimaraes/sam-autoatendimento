@@ -1,0 +1,77 @@
+version: '3.9'
+
+services:
+
+  # ===== Banco de Dados =====
+  db:
+    image: mariadb:11.3
+    container_name: sam-db
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:-rootpass}
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-sam_db}
+      MARIADB_USER: ${MARIADB_USER:-sam_user}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-sam_pass}
+    ports:
+      - "3306:3306"
+    volumes:
+      - sam_db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - sam-net
+
+  # ===== Backend (Spring Boot) =====
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: sam-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/${MARIADB_DATABASE:-sam_db}
+      SPRING_DATASOURCE_USERNAME: ${MARIADB_USER:-sam_user}
+      SPRING_DATASOURCE_PASSWORD: ${MARIADB_PASSWORD:-sam_pass}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: none
+      SPRING_FLYWAY_ENABLED: "true"
+      JWT_SECRET: ${JWT_SECRET:-troque_em_producao_por_uma_chave_forte_de_256bits}
+      JWT_EXPIRATION_MS: ${JWT_EXPIRATION_MS:-86400000}
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - sam-net
+
+  # ===== Frontend (React + Nginx) =====
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: sam-frontend
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "3000:80"
+    networks:
+      - sam-net
+
+volumes:
+  sam_db_data:
+
+networks:
+  sam-net:
+    driver: bridge

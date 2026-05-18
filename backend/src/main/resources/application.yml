@@ -1,0 +1,47 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://localhost:3306/sam_db
+    username: sam_user
+    password: sam_pass
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+jwt:
+  secret: ${JWT_SECRET:troque_em_producao_por_uma_chave_segura_de_256bits_minimo_aqui_000}
+  expiration-ms: ${JWT_EXPIRATION_MS:86400000}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  default-produces-media-type: application/json
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+logging:
+  level:
+    br.com.sam: INFO
+    org.springframework.security: WARN
+    org.flywaydb: INFO
+
+sam:
+  checkin:
+    janela-minutos: 30
