@@ -95,6 +95,7 @@ export default function ConsultasPacientePage() {
       {retornoModal && (
         <AgendarModal
           medico={{ id: retornoModal.medicoId, nomeCompleto: retornoModal.medicoNome, especialidade: 'Retorno' }}
+          consultaOrigemId={retornoModal.id}
           onClose={() => { setRetornoModal(null); carregar(); }}
         />
       )}

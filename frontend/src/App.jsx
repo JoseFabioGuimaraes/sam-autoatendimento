@@ -5,7 +5,9 @@ import Layout from './components/Layout';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import PacienteDashboard from './pages/paciente/PacienteDashboard';
+import ConsultasPacientePage from './pages/paciente/ConsultasPacientePage';
 import MedicoDashboard from './pages/medico/MedicoDashboard';
+import ConsultasMedicoPage from './pages/medico/ConsultasMedicoPage';
 import DisponibilidadePage from './pages/medico/DisponibilidadePage';
 
 function PrivateRoute({ children, allowedPerfil }) {
@@ -28,7 +30,9 @@ function AppRoutes() {
 
       <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
         <Route path="/paciente" element={<PrivateRoute allowedPerfil="PACIENTE"><PacienteDashboard /></PrivateRoute>} />
+        <Route path="/paciente/consultas" element={<PrivateRoute allowedPerfil="PACIENTE"><ConsultasPacientePage /></PrivateRoute>} />
         <Route path="/medico" element={<PrivateRoute allowedPerfil="MEDICO"><MedicoDashboard /></PrivateRoute>} />
+        <Route path="/medico/consultas" element={<PrivateRoute allowedPerfil="MEDICO"><ConsultasMedicoPage /></PrivateRoute>} />
         <Route path="/medico/disponibilidade" element={<PrivateRoute allowedPerfil="MEDICO"><DisponibilidadePage /></PrivateRoute>} />
       </Route>
 

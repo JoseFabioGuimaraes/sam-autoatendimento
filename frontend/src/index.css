@@ -92,7 +92,30 @@ input:focus,select:focus,textarea:focus{border-color:var(--primary);outline:none
 /* Empty */
 .empty-state{text-align:center;padding:2rem;color:var(--text-muted);font-size:0.9rem}
 
+/* Nav Links */
+.navbar-links {
+  display: flex;
+  gap: 0.5rem;
+}
+.nav-link {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition);
+  text-decoration: none;
+}
+.nav-link:hover {
+  color: var(--primary);
+  background: var(--primary-bg);
+}
+.nav-link.active {
+  color: var(--primary);
+  background: var(--primary-bg);
+}
+
 @media(max-width:768px){
-  .navbar{padding:0.7rem 1rem}
+  .navbar{padding:0.7rem 1rem; flex-direction: column; align-items: flex-start; gap: 0.5rem;}
   .main-content{padding:1rem}
 }

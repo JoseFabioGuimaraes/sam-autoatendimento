@@ -5,7 +5,7 @@ import { Calendar, Clock } from 'lucide-react';
 import { getTodayISO } from '../../utils/helpers';
 import './Paciente.css';
 
-export default function AgendarModal({ medico, onClose }) {
+export default function AgendarModal({ medico, consultaOrigemId, onClose }) {
   const [data, setData] = useState(getTodayISO());
   const [slots, setSlots] = useState([]);
   const [selected, setSelected] = useState(null);
@@ -32,11 +32,16 @@ export default function AgendarModal({ medico, onClose }) {
     if (!selected) return;
     setLoading(true);
     try {
-      await api.solicitarConsulta({ medicoId: medico.id, dataHora: selected });
-      toast.success('Consulta solicitada com sucesso!');
+      if (consultaOrigemId) {
+        await api.solicitarRetorno(consultaOrigemId, { medicoId: medico.id, dataHora: selected });
+        toast.success('Retorno solicitado com sucesso!');
+      } else {
+        await api.solicitarConsulta({ medicoId: medico.id, dataHora: selected });
+        toast.success('Consulta solicitada com sucesso!');
+      }
       onClose();
     } catch (err) {
-      toast.error(err.message || 'Erro ao solicitar consulta');
+      toast.error(err.message || 'Erro ao solicitar agendamento');
     } finally {
       setLoading(false);
     }
@@ -50,7 +55,7 @@ export default function AgendarModal({ medico, onClose }) {
   return (
     <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className="modal">
-        <h2><Calendar size={20} style={{ marginRight: 8, verticalAlign: 'middle' }} />Agendar com {medico.nomeCompleto}</h2>
+        <h2><Calendar size={20} style={{ marginRight: 8, verticalAlign: 'middle' }} />{consultaOrigemId ? 'Agendar Retorno com' : 'Agendar com'} {medico.nomeCompleto}</h2>
         <p style={{ color: 'var(--primary-light)', fontSize: '0.85rem', marginBottom: '1rem' }}>{medico.especialidade}</p>
 
         <div className="form-group">
@@ -82,7 +87,7 @@ export default function AgendarModal({ medico, onClose }) {
         <div className="modal-actions">
           <button className="btn btn-outline" onClick={onClose}>Cancelar</button>
           <button className="btn btn-primary" onClick={confirmar} disabled={!selected || loading} id="btn-confirmar-consulta">
-            {loading ? 'Solicitando...' : 'Confirmar Consulta'}
+            {loading ? 'Solicitando...' : consultaOrigemId ? 'Confirmar Retorno' : 'Confirmar Consulta'}
           </button>
         </div>
       </div>
